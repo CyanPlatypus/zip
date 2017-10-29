@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Zip</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+<form action="#" th:action="@{/zips}" th:object="${newzip}" method="post">
+    <p>Name: <input type="text" th:field="*{name}"  />
+        <input type="submit" value="Add new" /></p>
+</form>
+
+
+<div th:each="message : ${zipList}">
+    <table>
+    <tr>
+    <td th:text="${message.id}"></td>
+    <td><a href="#" th:text="${message.name}">Title ...</a></td>
+    <td th:text="${message.creationDate}">Text ...</td>
+        <td><button>Open</button></td>
+        <td>
+            <form th:method="put" th:action="@{/zips/__${message.id}__}">
+                <button type="submit">Edit</button>
+            </form>
+        </td>
+        <td>
+            <form th:method="delete" th:action="@{/zips/__${message.id}__}">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+
+    </tr>
+    </table>
+</div>
+</body>
+</html>
