@@ -49,7 +49,7 @@ public class ZipController {
         return "hello";
     }
 
-    @RequestMapping(method=DELETE, value="zips/{id}" )
+    @RequestMapping(method=DELETE, value="/zips/{id}" )
     public String delete(@PathVariable Integer id) {
         zipRepository.delete(id);
         return "redirect:/zips";
@@ -65,9 +65,11 @@ public class ZipController {
         return "redirect:/zips";
     }
 
-    @RequestMapping(method=PUT, value="zips/{id}" )
-    public String update(@PathVariable Integer id) {
-        //zipRepository.delete(id);
+    @RequestMapping(method=PUT, value="/zips" )
+    public String update(@ModelAttribute Zip zip) {//RequestBody
+        Zip z = zipRepository.findOne(zip.getId());
+        z.setName(zip.getName());
+        zipRepository.save(z);
         return "redirect:/zips";
     }
 }

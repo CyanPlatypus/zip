@@ -2,36 +2,162 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Zip</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
+    <meta http-equiv="Content-Type" name="viewport"
+          content="text/html; charset=UTF-8" />
+    <!--<meta charset="utf-8"/>-->
+    <!--<meta name="viewport" content="text/html, width=device-width, initial-scale=1, shrink-to-fit=no"/>-->
 
-<form action="#" th:action="@{/zips}" th:object="${newzip}" method="post">
-    <p>Name: <input type="text" th:field="*{name}"  />
-        <input type="submit" value="Add new" /></p>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+    </link>
+
+    <!--<link href="webjars/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>-->
+
+</head>
+
+<form class="form-inline" action="#" th:action="@{/zips}" th:object="${newzip}" method="post">
+    <label for="inlineFormInput">Name:</label>
+    <input class="form-control form-control-sm mb-2 mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2"
+           type="text" th:field="*{name}" id="inlineFormInput" />
+    <input class="btn btn-secondary btn-sm" type="submit" value="Add new" />
 </form>
 
+<body>
 
-<div th:each="message : ${zipList}">
-    <table>
-    <tr>
-    <td th:text="${message.id}"></td>
-    <td><a href="#" th:text="${message.name}">Title ...</a></td>
-    <td th:text="${message.creationDate}">Text ...</td>
-        <td><button>Open</button></td>
-        <td>
-            <form th:method="put" th:action="@{/zips/__${message.id}__}">
-                <button type="submit">Edit</button>
-            </form>
-        </td>
-        <td>
-            <form th:method="delete" th:action="@{/zips/__${message.id}__}">
-                <button type="submit">Delete</button>
-            </form>
-        </td>
+<div class="container-fluid">
 
-    </tr>
+    <div class="row">
+
+        <div class="col bg-dark text-white">
+
+
+
+<!--<div th:each="message : ${zipList}">-->
+    <table >
+        <!--class="table"-->
+        <tbody  th:each="message : ${zipList}">
+        <tr>
+            <th scope="row" th:text="${message.id}"></th>
+            <!--<td th:text="${message.id}"></td>-->
+            <td><a href="#" th:text="${message.name}"></a></td>
+            <td th:text="${message.creationDate}"></td>
+            <td><button class="btn btn-secondary btn-sm">Open</button></td>
+            <td>
+                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal"
+                        th:attr="data-id=${message.id}, data-name=${message.name}">
+                    Edit
+                </button>
+            </td>
+            <td>
+                <form th:method="delete" th:action="@{/zips/__${message.id}__}">
+                    <button class="btn btn-secondary btn-sm" type="submit">Delete</button>
+                </form>
+            </td>
+
+        </tr>
+
+        </tbody>
     </table>
+
+
+        </div>
+
+        <div class="col bg-warning text-white">
+
+
+
+                <!--class="table"-->
+                <div class="list-group" th:each="message : ${zipList}">
+
+                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div>
+                        <label th:text="${message.id}"></label>
+                    <a  href="#" th:text="${message.name}"></a>
+                    <label th:text="${message.creationDate}"></label>
+                    <button class="btn btn-secondary btn-sm">Open</button>
+
+                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal"
+                                th:attr="data-id=${message.id}, data-name=${message.name}">
+                            Edit
+                        </button>
+
+                        <form th:method="delete" th:action="@{/zips/__${message.id}__}">
+                            <button class="btn btn-secondary btn-sm" type="submit">Delete</button>
+                        </form>
+                        </div>
+                    </a>
+
+                </div>
+
+
+        </div>
+
+
+
+        <div class="col">
+
+
+
+
+
+        </div>
+
+
+
+
+    </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:method="put" th:action="@{/zips}">
+                    <div class="form-group">
+                        <input type="text" name="name" class="form-control" id="r-name"/>
+                        <input class="hide_id" name="id" type="hidden" id="recipient-name" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+<script>
+    $('#editModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var name = button.data('name')
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        console.log(name)
+
+        var modal = $(this)
+        console.log(modal)
+        modal.find('.modal-title').text('Edit zip with id ' + id)
+        modal.find('.hide_id').val(id)
+        modal.find('.form-control').val(name)
+    })
+</script>
+
 </body>
 </html>

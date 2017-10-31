@@ -1,13 +1,12 @@
 package com.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
+@Table(name="zip")
 public class Zip {
 
     @Id
@@ -17,9 +16,14 @@ public class Zip {
     private String name;
     private LocalDateTime creationDate;
 
+    @OneToMany(mappedBy = "zip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Doc> docs;
+
     public Zip(){
         name = null;
         creationDate = null;
+        docs = new HashSet<>();
+
     }
 
     //public Zip(String n){
@@ -41,7 +45,7 @@ public class Zip {
     }
 
     public void setName(String n){
-        if(name==null){
+        if(n!=null){
             name = n;
         }
     }
@@ -54,6 +58,34 @@ public class Zip {
         if(creationDate==null){
             creationDate= d;
         }
+    }
+
+    public void setProducts(Set<Doc> d){
+        docs = d;
+    }
+
+    public Set<Doc> getProducts(){
+        return docs;
+    }
+
+    public void AddDoc(Doc d){
+        docs.add(d);
+    }
+
+    public void RemoveDoc (Doc d){
+        docs.remove(d);
+    }
+
+    public void RemoveDoc(Integer idD){
+        docs.removeIf(b-> b.getId() == idD);
+    }
+
+    public Doc FindDocByID(Integer idD){
+               
+        for (Doc d : docs) {
+            if (d.getId() == idD) return d;
+        }
+        return null;
     }
 
     public void setCurrentCreationDate(){
