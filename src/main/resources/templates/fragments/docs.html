@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" name="viewport"
+          content="text/html; charset=UTF-8" />
+    <title>Docs</title>
+</head>
+<body>
+
+<div class="col bg-warning text-white" th:fragment="docs">
+
+    <form class="form-inline" action="#" th:action="@{/zips/__${zip.id}__}"  method="post">
+        <label for="inlineFormInput">Name:</label>
+        <input class="form-control form-control-sm mb-2 mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2"
+               type="text" name="name" id="inlineFormInput" />
+        <input class="btn btn-secondary btn-sm" type="submit" value="Add new" />
+    </form>
+
+    <h1 th:text="${zip.id + '  ' + zip.name}"></h1>
+
+    <table >
+        <!--class="table"-->
+        <tbody  th:each="doc : ${docList}" th:if="${docList != null}">
+        <tr>
+            <th scope="row" th:text="${doc.id}"></th>
+            <td><span class="mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2" th:text="${doc.name}"></span></td>
+            <!--<td class="mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2" th:text="${doc.name}"></td>-->
+            <td>
+                <form th:method="get" th:action="@{/zips/__${zip.id}__/__${doc.id}__}">
+                    <button class="btn btn-secondary btn-sm mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2">
+                        <span class="glyphicon glyphicon-folder-open"></span>
+                        <!--Open-->
+                    </button>
+                </form>
+            </td>
+            <!--<td>-->
+                <!--<button type="button" class="btn btn-secondary btn-sm mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2" data-toggle="modal" data-target="#editModal"-->
+                        <!--th:attr="data-id=${doc.id}, data-name=${doc.name}">-->
+                    <!--<span class="glyphicon glyphicon-pencil"></span>-->
+                    <!--&lt;!&ndash;Edit&ndash;&gt;-->
+                <!--</button>-->
+            <!--</td>-->
+            <td>
+                <form th:method="delete" th:action="@{/zips/__${zip.id}__/__${doc.id}__}">
+                    <button class="btn btn-secondary btn-sm mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2" type="submit">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        <!--Delete-->
+                    </button>
+                </form>
+            </td>
+
+        </tr>
+
+        </tbody>
+    </table>
+
+
+
+</div>
+
+</body>
+</html>

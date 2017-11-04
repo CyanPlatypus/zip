@@ -4,9 +4,6 @@
     <title>Zip</title>
     <meta http-equiv="Content-Type" name="viewport"
           content="text/html; charset=UTF-8" />
-    <!--<meta charset="utf-8"/>-->
-    <!--<meta name="viewport" content="text/html, width=device-width, initial-scale=1, shrink-to-fit=no"/>-->
-
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
@@ -14,16 +11,11 @@
 
     </link>
 
-    <!--<link href="webjars/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </head>
-
-<form class="form-inline" action="#" th:action="@{/zips}" th:object="${newzip}" method="post">
-    <label for="inlineFormInput">Name:</label>
-    <input class="form-control form-control-sm mb-2 mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2"
-           type="text" th:field="*{name}" id="inlineFormInput" />
-    <input class="btn btn-secondary btn-sm" type="submit" value="Add new" />
-</form>
 
 <body>
 
@@ -31,9 +23,15 @@
 
     <div class="row">
 
-        <div class="col bg-dark text-white">
+        <div class="col ">
+            <!--bg-dark text-white-->
 
-
+            <form class="form-inline" action="#" th:action="@{/zips}"  method="post">
+                <label for="inlineFormInput">Name:</label>
+                <input class="form-control form-control-sm mb-2 mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2"
+                       type="text" name="name" id="inlineFormInput" />
+                <input class="btn btn-secondary btn-sm" type="submit" value="Add new" />
+            </form>
 
 <!--<div th:each="message : ${zipList}">-->
     <table >
@@ -42,18 +40,29 @@
         <tr>
             <th scope="row" th:text="${message.id}"></th>
             <!--<td th:text="${message.id}"></td>-->
-            <td><a href="#" th:text="${message.name}"></a></td>
+            <td><a  href="#" class="mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2" th:text="${message.name}"></a></td>
             <td th:text="${message.creationDate}"></td>
-            <td><button class="btn btn-secondary btn-sm">Open</button></td>
             <td>
-                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal"
+                <form th:method="get" th:action="@{/zips/__${message.id}__}">
+                    <button class="btn btn-secondary btn-sm mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2">
+                        <span class="glyphicon glyphicon-folder-open"></span>
+                        <!--Open-->
+                    </button>
+                </form>
+            </td>
+            <td>
+                <button type="button" class="btn btn-secondary btn-sm mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2" data-toggle="modal" data-target="#editModal"
                         th:attr="data-id=${message.id}, data-name=${message.name}">
-                    Edit
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <!--Edit-->
                 </button>
             </td>
             <td>
                 <form th:method="delete" th:action="@{/zips/__${message.id}__}">
-                    <button class="btn btn-secondary btn-sm" type="submit">Delete</button>
+                    <button class="btn btn-secondary btn-sm mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2" type="submit">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        <!--Delete-->
+                    </button>
                 </form>
             </td>
 
@@ -65,50 +74,49 @@
 
         </div>
 
-        <div class="col bg-warning text-white">
+        <div th:replace="@{'fragments/' + ${viewD}} :: ${viewD}"></div>
+
+        <div th:replace="@{'fragments/' + ${viewC}} :: ${viewC}"></div>
 
 
+        <!--<div th:replace="${viewD} ? ~{fragments/docs} : ~{}" />-->
 
-                <!--class="table"-->
-                <div class="list-group" th:each="message : ${zipList}">
+        <!--<div class="col bg-warning text-white">-->
 
-                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                        <div>
-                        <label th:text="${message.id}"></label>
-                    <a  href="#" th:text="${message.name}"></a>
-                    <label th:text="${message.creationDate}"></label>
-                    <button class="btn btn-secondary btn-sm">Open</button>
-
-                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal"
-                                th:attr="data-id=${message.id}, data-name=${message.name}">
-                            Edit
-                        </button>
-
-                        <form th:method="delete" th:action="@{/zips/__${message.id}__}">
-                            <button class="btn btn-secondary btn-sm" type="submit">Delete</button>
-                        </form>
-                        </div>
-                    </a>
-
-                </div>
+        <!--<div class="col">-->
 
 
-        </div>
+            <!--&lt;!&ndash;class="table"&ndash;&gt;-->
+            <!--<div class="list-group" th:each="message : ${zipList}">-->
+
+                <!--<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">-->
+                    <!--<div>-->
+                        <!--<label th:text="${message.id}"></label>-->
+                        <!--<a  href="#" th:text="${message.name}"></a>-->
+                        <!--<label th:text="${message.creationDate}"></label>-->
+                        <!--<button class="btn btn-secondary btn-sm">Open</button>-->
+
+                        <!--<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editModal"-->
+                                <!--th:attr="data-id=${message.id}, data-name=${message.name}">-->
+                            <!--Edit-->
+                        <!--</button>-->
+
+                        <!--<form th:method="delete" th:action="@{/zips/__${message.id}__}">-->
+                            <!--<button class="btn btn-secondary btn-sm" type="submit">Delete</button>-->
+                        <!--</form>-->
+                    <!--</div>-->
+                <!--</a>-->
+
+            <!--</div>-->
 
 
-
-        <div class="col">
-
-
-
-
-
-        </div>
+        <!--</div>-->
 
 
 
 
     </div>
+
 </div>
 
 <!-- Modal -->

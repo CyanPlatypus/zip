@@ -1,5 +1,6 @@
 package com.Controller;
 
+import com.Model.Doc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
@@ -31,10 +32,18 @@ public class ZipController {
     }
 
     @GetMapping(value="/zips")
-    public String getAllUsers(Model model) {
+    public String showZips(Model model) {
         model.addAttribute("zipList", zipRepository.findAll());
-        model.addAttribute("newzip", new Zip());
-        return "all";
+        if(!model.containsAttribute("viewD"))
+        {
+            model.addAttribute("viewD", "none");
+        }
+        if(!model.containsAttribute("viewC"))
+        {
+            model.addAttribute("viewC", "none");
+        }
+        ////model.addAttribute("newzip", new Zip());
+        return "fragments/all";
     }
 
 //    @GetMapping(path="/all")
@@ -55,11 +64,19 @@ public class ZipController {
         return "redirect:/zips";
     }
 
-    //@GetMapping(path="/hello")//RequestMapping
+    @RequestMapping(method=DELETE, value="/zips/{idZ}/{idD}" )
+    public String deleteDoc(@PathVariable Integer idZ, @PathVariable Integer idD) {
+        Zip z = zipRepository.findOne(idZ);
+        if(z!=null){
+            z.removeDoc(idD);
+            zipRepository.save(z);
+        }
+        return "redirect:/zips/{idZ}";
+    }
+
+
     @RequestMapping(method=POST, value="/zips")
-    public String add(@ModelAttribute Zip z) {
-        //Zip n = new Zip();
-        //n.setName(z.getName());
+    public String addZip(@ModelAttribute Zip z) {
         z.setCurrentCreationDate();
         zipRepository.save(z);
         return "redirect:/zips";
@@ -68,8 +85,76 @@ public class ZipController {
     @RequestMapping(method=PUT, value="/zips" )
     public String update(@ModelAttribute Zip zip) {//RequestBody
         Zip z = zipRepository.findOne(zip.getId());
-        z.setName(zip.getName());
-        zipRepository.save(z);
+        if(z != null) {
+            z.setName(zip.getName());
+            zipRepository.save(z);
+        }
         return "redirect:/zips";
+    }
+
+    @RequestMapping(method=PUT, value="/zips/{idZ}/{idD}" )
+    public String updateDoc(@PathVariable("idZ") Integer idZ, @PathVariable("idD") Integer idD,
+                            @ModelAttribute Doc d,  Model model) {//RequestBody
+        Zip z = zipRepository.findOne(idZ);
+        if(z != null) {
+            Doc doc = z.findDocByID(idD);
+            if(doc!=null){
+                doc.setContent(d.getContent());
+
+                zipRepository.save(z);
+
+            }
+
+        }
+        return showDocs(idZ,idD,model);
+    }
+
+    @RequestMapping(method=GET, value="/zips/{idZ}" )
+    public String showDocs(@PathVariable Integer idZ, Model model) {
+//        Doc d = new Doc();
+//        d.setName("Anna");
+//        zipRepository.findOne(idZ).AddDoc(d);
+//        zipRepository.save(zipRepository.findOne(idZ));
+
+        //model.addAttribute("zipList", zipRepository.findAll());
+
+        Zip z = zipRepository.findOne(idZ);
+        if(z!=null){
+            model.addAttribute("docList", z.getOrderedDocs()/*.sort((p1, p2) -> {return p1.getId()-p2.getId();})*/);
+            model.addAttribute("zip", zipRepository.findOne(idZ));
+            model.addAttribute("viewD","docs");
+        }
+
+        return showZips(model);//"all";
+    }
+
+    @RequestMapping(method=GET, value="/zips/{idZ}/{idD}" )
+    public String showDocs(@PathVariable Integer idZ, @PathVariable Integer idD, Model model) {
+
+        Zip z = zipRepository.findOne(idZ);
+        if(z!=null){
+            Doc d = z.findDocByID(idD);
+            if(d!=null){
+                model.addAttribute("doc", d);
+                model.addAttribute("viewC","cont");
+            }
+
+        }
+
+        return showDocs(idZ,model);//"all";
+    }
+
+    @RequestMapping(method=POST, value="/zips/{idZ}")
+    //@PathVariable("id") Long id, @ModelAttribute("user") User user,  Model uiModel
+    public String addDoc(@PathVariable("idZ") Integer idZ,@ModelAttribute Doc d,  Model model) {
+        Zip z = zipRepository.findOne(idZ);
+        if (z!=null)
+        {
+            z.addDoc(d);
+            d.setZip(z);
+            zipRepository.save(z);
+        }
+
+        return "redirect:/zips/{idZ}";
     }
 }

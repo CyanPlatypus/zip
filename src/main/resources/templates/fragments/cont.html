@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" name="viewport"
+          content="text/html; charset=UTF-8" />
+    <title>Docs</title>
+</head>
+<body>
+
+<div class="col bg-warning text-white" th:fragment="cont">
+
+    <h1 th:text="${doc.id + '  ' + doc.name}"></h1>
+    <!--<p th:text="${doc.content}"></p>-->
+
+    <form class="form" action="#" th:action="@{/zips/__${zip.id}__/__${doc.id}__}"  th:method="put">
+        <textarea th:text="${doc.content}" name="content" class="form-control mr-sm-2 mb-sm-2 ml-sm-2"
+                  id="message-text"  rows="20"></textarea>
+        <!--<input class="form-control form-control-sm mb-2 mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2"-->
+               <!--type="text" th:text="${doc.content}" name="content" />-->
+        <p>
+           <input class="btn btn-secondary btn-sm mt-sm-2 mr-sm-2 mb-sm-2 ml-sm-2"
+                  type="submit" value="Save" />
+       </p>
+    </form>
+
+</div>
+
+</body>
+</html>

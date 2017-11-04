@@ -16,7 +16,7 @@ public class Zip {
     private String name;
     private LocalDateTime creationDate;
 
-    @OneToMany(mappedBy = "zip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "zip", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Doc> docs;
 
     public Zip(){
@@ -60,28 +60,35 @@ public class Zip {
         }
     }
 
-    public void setProducts(Set<Doc> d){
+    public void setDocs(Set<Doc> d){
         docs = d;
     }
 
-    public Set<Doc> getProducts(){
+    public Set<Doc> getDocs(){
         return docs;
     }
 
-    public void AddDoc(Doc d){
+    public ArrayList<Doc> getOrderedDocs(){
+        ArrayList<Doc> aD = new ArrayList<>();
+        aD.addAll(docs);
+        aD.sort((a, b)-> a.getId() - b.getId());
+        return  aD;
+    }
+
+    public void addDoc(Doc d){
         docs.add(d);
     }
 
-    public void RemoveDoc (Doc d){
+    public void removeDoc (Doc d){
         docs.remove(d);
     }
 
-    public void RemoveDoc(Integer idD){
+    public void removeDoc(Integer idD){
         docs.removeIf(b-> b.getId() == idD);
     }
 
-    public Doc FindDocByID(Integer idD){
-               
+    public Doc findDocByID(Integer idD){
+
         for (Doc d : docs) {
             if (d.getId() == idD) return d;
         }
