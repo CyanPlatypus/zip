@@ -10,7 +10,7 @@ public class Doc {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private long id;
     private String name;
     @Lob //LongText
     private String content;
@@ -21,11 +21,11 @@ public class Doc {
 
     public Doc(){}
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -11,7 +11,7 @@ public class Zip {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    private long id;
 
     private String name;
     private LocalDateTime creationDate;
@@ -32,11 +32,11 @@ public class Zip {
     //    creationDate  = LocalDateTime.now();
     //}
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -71,7 +71,7 @@ public class Zip {
     public ArrayList<Doc> getOrderedDocs(){
         ArrayList<Doc> aD = new ArrayList<>();
         aD.addAll(docs);
-        aD.sort((a, b)-> a.getId() - b.getId());
+        aD.sort((a, b)-> (int)(a.getId() - b.getId()));
         return  aD;
     }
 
@@ -83,11 +83,11 @@ public class Zip {
         docs.remove(d);
     }
 
-    public void removeDoc(Integer idD){
+    public void removeDoc(long idD){
         docs.removeIf(b-> b.getId() == idD);
     }
 
-    public Doc findDocByID(Integer idD){
+    public Doc findDocByID(long idD){
 
         for (Doc d : docs) {
             if (d.getId() == idD) return d;
